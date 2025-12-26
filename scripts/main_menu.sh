@@ -9,7 +9,7 @@ case $REPLY in
 echo "Create Database"
 ;;
 2)
-#./list_database.sh
+./list_databases.sh
 echo "List Databases"
 ;;
 3)
