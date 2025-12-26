@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo $1 "Database Menu"
 select option in "Create Table" "List Tables" "Drop Table" "Insert into Table" "Select From Table"  "Delete From Table" "Update Table" "Back to Main Menu"
 do 
     case $REPLY in 
