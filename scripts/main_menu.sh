@@ -5,15 +5,19 @@ select choice in "Create Database" "List Databases" "Connect To Databases" "Drop
 do 
 case $REPLY in
 1)
+./create_database.sh
 echo "Create Database"
 ;;
 2)
+#./list_database.sh
 echo "List Databases"
 ;;
 3)
+#./conect_to_database.sh
 echo "Connect To Databases"
 ;;
 4)
+#./drop_database.sh
 echo "Drop Database"
 ;;
 *)
