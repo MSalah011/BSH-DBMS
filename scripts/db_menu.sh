@@ -10,11 +10,11 @@ do
         ;;
         2) 
         echo List tables 
-        #./scripts/list_tables.sh $database_name
+        ./scripts/list_tables.sh $database_name
         ;;
         3) 
         echo Drop Table 
-        #./scripts/drop_table.sh $database_name
+        ./scripts/drop_table.sh $database_name
         ;;
         4) 
         echo Insert into Table 
