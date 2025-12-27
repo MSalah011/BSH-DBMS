@@ -22,7 +22,7 @@ do
         ;;
         5) 
         echo Select from Table 
-        #./scripts/select_from_table.sh $database_name
+        ./scripts/select_from_table.sh $database_name
         ;;
         6) 
         echo Delete from Table 
