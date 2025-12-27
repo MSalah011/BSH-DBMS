@@ -18,7 +18,7 @@ do
         ;;
         4) 
         echo Insert into Table 
-        #./scripts/insert_into_table.sh $database_name
+        ./scripts/insert_into_table.sh $database_name
         ;;
         5) 
         echo Select from Table 
