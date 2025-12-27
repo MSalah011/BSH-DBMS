@@ -12,7 +12,7 @@ if [ -f "$table_path" ];then
     echo "the table already exist"
 else
     #read number of col from user
-    echo -n "Enter number of colums: "
+    echo -n "Enter number of columns: "
     read col_num
 
     columns=""
