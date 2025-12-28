@@ -33,6 +33,7 @@ if [ -f "$table_path" ]; then
             echo "7) BETWEEN"
             echo "8) IN"
             echo "9) AND"
+            echo "10) OR"
             echo -n "Choose operator:"
             read op
             # read value(s)
@@ -54,7 +55,8 @@ if [ -f "$table_path" ]; then
                 #get values
                 echo -n "Enter values separated by colon (e.g. 10:20:30): "
                 read in_values
-            elif [ "$op" -eq 9 ]; then
+            # if user choice OR or AND    
+            elif [ "$op" -eq 9 ] || [ "$op" -eq 10 ]; then
                 echo "---- First Condition ----"
                 #get name of column1
                 echo -n "Column name: "
@@ -83,7 +85,8 @@ if [ -f "$table_path" ]; then
             echo "$columns"
             echo "----------------------------"
            # Get column numbers
-            if [ "$op" -eq 9 ]; then
+           # if choice AND or OR
+            if [ "$op" -eq 9 ] || [ "$op" -eq 10 ]; then
                 # AND: get numbers for both columns
                 col_num1=$(echo "$columns" | awk -F: -v col="$col1" '{
                     for (i=1; i<=NF; i++) if ($i==col) {print i; exit}
@@ -162,6 +165,12 @@ if [ -f "$table_path" ]; then
                 awk -F: -v c1="$col_num1" -v v1="$val1" \
                     -v c2="$col_num2" -v v2="$val2" \
                 'NR > 3 && $c1 == v1 && $c2 == v2 { print }' "$table_path"
+                ;;
+            10) 
+                # OR
+                awk -F: -v c1="$col_num1" -v v1="$val1" \
+                    -v c2="$col_num2" -v v2="$val2" \
+                'NR > 3 && ($c1==v1 || $c2==v2) { print }' "$table_path"
                 ;;
             *)
                 echo "Invalid operator!"
