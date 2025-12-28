@@ -2,6 +2,12 @@
 # This script inserts a record into a specified table in a specified database
 db_path="./Databases"
 database_name="$1"
+clear
+echo "--- DATABASE MANAGEMENT SYSTEM ---"
+echo "----------------------------------"
+echo "-------- INSERT INTO TABLE -------"
+echo "----------------------------------"
+echo ""
 read -p"Enter table name: " table_name
 table_path="$db_path/$database_name/$table_name"
 # Check if table exists
