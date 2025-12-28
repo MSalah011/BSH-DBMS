@@ -26,7 +26,7 @@ do
         ;;
         6) 
         echo Delete from Table 
-        #./scripts/delete_from_table.sh $database_name
+        ./scripts/delete_from_table.sh $database_name
         ;;
         7) 
         echo Update Table 
