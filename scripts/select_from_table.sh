@@ -32,6 +32,8 @@ if [ -f "$table_path" ]; then
             echo "2) >"
             echo "3) <"
             echo "4) !="
+            echo "5) >="
+            echo "6) <="
             echo -n "Choose operator:"
             read op
             #print name of columns
@@ -56,20 +58,34 @@ if [ -f "$table_path" ]; then
             # select rows
             case $op in
             1)
+                # =
                 awk -F: -v c="$col_num" -v v="$value" \
                     'NR > 3 && $c == v { print }' "$table_path"
                 ;;
             2)
+                 # >
                 awk -F: -v c="$col_num" -v v="$value" \
                     'NR > 3 && $c > v { print }' "$table_path"
                 ;;
             3)
+                # <
                 awk -F: -v c="$col_num" -v v="$value" \
                     'NR > 3 && $c < v { print }' "$table_path"
                 ;;
             4)
+                 # !=
                 awk -F: -v c="$col_num" -v v="$value" \
                     'NR > 3 && $c != v { print }' "$table_path"
+                ;;
+            5)
+                # >=
+                awk -F: -v c="$col_num" -v v="$value" \
+                    'NR > 3 && $c >= v { print }' "$table_path"
+                ;;
+            6)
+                # <=
+                awk -F: -v c="$col_num" -v v="$value" \
+                    'NR > 3 && $c <= v { print }' "$table_path"
                 ;;
             *)
                 echo "Invalid operator!"
