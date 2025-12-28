@@ -7,3 +7,4 @@ if [ -z "$(ls -A "$db_path/$database_name")" ]; then
     echo "No tables found in database '$database_name'."
 else
     ls "$db_path/$database_name"
+fi

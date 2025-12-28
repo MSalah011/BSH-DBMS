@@ -1,8 +1,14 @@
 #! /bin/bash
 db_path="./Databases"
-database_name=$1
+database_name="$1"
+clear
+echo "--- DATABASE MANAGEMENT SYSTEM ---"
+echo "----------------------------------"
+echo "--------- CREATE TABLE ----------"
+echo "----------------------------------"
+echo ""
 #read name from user
-echo -n "enter the name of table":
+echo -n "Enter the name of table: "
 read table_name
 # save path 
 table_path=$db_path/$database_name/$table_name

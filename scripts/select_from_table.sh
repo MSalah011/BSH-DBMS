@@ -1,5 +1,11 @@
 #! /bin/bash
-database_name=$1
+database_name="$1"
+clear
+echo "--- DATABASE MANAGEMENT SYSTEM ---"
+echo "----------------------------------"
+echo "-------- SELECT FROM TABLE -------"
+echo "----------------------------------"
+echo ""
 db_path="./Databases"
 echo -n "Enter table name: "
 read table_name
@@ -208,10 +214,10 @@ if [ -f "$table_path" ]; then
             esac
                 ;;
 
-        *)
-            echo "Invalid choice!"
-            ;;
-        esac
+    *)
+        echo "Invalid choice!"
+        ;;
+    esac
 
 else
     echo "Table does not exist!"

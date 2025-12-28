@@ -1,5 +1,10 @@
 #!/bin/bash
-
+clear
+echo "--- DATABASE MANAGEMENT SYSTEM ---"
+echo "----------------------------------"
+echo "-------- CREATE DATABASE ---------"
+echo "----------------------------------"
+echo ""
 # Path where all databases will be stored
 db_path="./Databases"
 
