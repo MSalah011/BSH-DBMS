@@ -25,8 +25,6 @@ if [ -f "$table_path" ]; then
             # -------- Select With WHERE --------
             echo -n "Enter column name: "
             read col_name
-            echo -n "Enter value: "
-            read value
            #get operator  
             echo "1) ="
             echo "2) >"
@@ -34,8 +32,19 @@ if [ -f "$table_path" ]; then
             echo "4) !="
             echo "5) >="
             echo "6) <="
+            echo "7) BETWEEN"
             echo -n "Choose operator:"
             read op
+            # read value(s)
+            if [ "$op" -eq 7 ]; then
+                echo -n "Enter start value: "
+                read start
+                echo -n "Enter end value: "
+                read end
+            else
+                echo -n "Enter value: "
+                read value
+            fi
             #print name of columns
             columns=$(sed -n '3p' "$table_path")
             echo "----------------------------"
@@ -71,7 +80,7 @@ if [ -f "$table_path" ]; then
                 # <
                 awk -F: -v c="$col_num" -v v="$value" \
                     'NR > 3 && $c < v { print }' "$table_path"
-                ;;
+                ;; 
             4)
                  # !=
                 awk -F: -v c="$col_num" -v v="$value" \
@@ -86,6 +95,11 @@ if [ -f "$table_path" ]; then
                 # <=
                 awk -F: -v c="$col_num" -v v="$value" \
                     'NR > 3 && $c <= v { print }' "$table_path"
+                ;;
+            7)
+                # between
+                awk -F: -v c="$col_num" -v s="$start" -v e="$end" \
+                    'NR > 3 && $c >= s && $c <= e { print }' "$table_path"
                 ;;
             *)
                 echo "Invalid operator!"
