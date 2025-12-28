@@ -27,6 +27,15 @@ if [ -f "$table_path" ]; then
             read col_name
             echo -n "Enter value: "
             read value
+           #get operator  
+            echo "1) ="
+            echo "2) >"
+            echo "3) <"
+            echo "4) !="
+            echo "5) >="
+            echo "6) <="
+            echo -n "Choose operator:"
+            read op
             #print name of columns
             columns=$(sed -n '3p' "$table_path")
             echo "----------------------------"
@@ -47,9 +56,42 @@ if [ -f "$table_path" ]; then
                 exit 1
             fi
             # select rows
-            awk -F: -v col="$col_num" -v val="$value" \
-                'NR > 3 && $(col) == val { print }' "$table_path"
-            ;;
+            case $op in
+            1)
+                # =
+                awk -F: -v c="$col_num" -v v="$value" \
+                    'NR > 3 && $c == v { print }' "$table_path"
+                ;;
+            2)
+                 # >
+                awk -F: -v c="$col_num" -v v="$value" \
+                    'NR > 3 && $c > v { print }' "$table_path"
+                ;;
+            3)
+                # <
+                awk -F: -v c="$col_num" -v v="$value" \
+                    'NR > 3 && $c < v { print }' "$table_path"
+                ;;
+            4)
+                 # !=
+                awk -F: -v c="$col_num" -v v="$value" \
+                    'NR > 3 && $c != v { print }' "$table_path"
+                ;;
+            5)
+                # >=
+                awk -F: -v c="$col_num" -v v="$value" \
+                    'NR > 3 && $c >= v { print }' "$table_path"
+                ;;
+            6)
+                # <=
+                awk -F: -v c="$col_num" -v v="$value" \
+                    'NR > 3 && $c <= v { print }' "$table_path"
+                ;;
+            *)
+                echo "Invalid operator!"
+                ;;
+            esac
+                ;;
 
         *)
             echo "Invalid choice!"
