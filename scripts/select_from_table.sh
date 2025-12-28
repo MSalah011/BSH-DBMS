@@ -33,14 +33,20 @@ if [ -f "$table_path" ]; then
             echo "5) >="
             echo "6) <="
             echo "7) BETWEEN"
+            echo "8) IN"
             echo -n "Choose operator:"
             read op
             # read value(s)
+            #if user choice between
             if [ "$op" -eq 7 ]; then
                 echo -n "Enter start value: "
                 read start
                 echo -n "Enter end value: "
                 read end
+            #if user choice IN
+            elif [ "$op" -eq 8 ]; then
+                echo -n "Enter values separated by colon (e.g. 10:20:30): "
+                read in_values
             else
                 echo -n "Enter value: "
                 read value
@@ -100,6 +106,21 @@ if [ -f "$table_path" ]; then
                 # between
                 awk -F: -v c="$col_num" -v s="$start" -v e="$end" \
                     'NR > 3 && $c >= s && $c <= e { print }' "$table_path"
+                ;;
+            8)
+                # IN
+                awk -F: -v c="$col_num" -v vals="$in_values" '
+                BEGIN {
+                    split(vals, arr, ":")
+                }
+                NR > 3 {
+                    for (i in arr) {
+                        if ($c == arr[i]) {
+                            print
+                            break
+                        }
+                    }
+                }' "$table_path"
                 ;;
             *)
                 echo "Invalid operator!"
