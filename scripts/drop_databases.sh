@@ -1,4 +1,5 @@
 #! /bin/bash
+clear
 db_path="./Databases"
 
 echo -n "Enter database name to drop: "

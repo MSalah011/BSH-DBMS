@@ -10,18 +10,6 @@ echo ""
 #read name from user
 echo -n "Enter the name of table: "
 read table_name
-
-# Check for empty table name
-if [[ -z "$table_name" ]]; then
-    echo "Table name cannot be empty!"
-    exit 1
-fi
-# Check for invalid characters in table name
-if [[ "$table_name" =~ [/:\"\'\\\?\*\<\>\|] ]]; then
-        echo "Table name contains invalid characters! Please avoid / : \" ' \ ? * < > |"
-        exit 1
-fi
-
 # save path 
 table_path=$db_path/$database_name/$table_name
 
@@ -63,22 +51,9 @@ else
             data_types="$data_types:$col_type"
         fi
     done
-    IFS=':' read -ra col_array <<< "$columns"
-    while true; do
-        #read pk for which col from user
-        echo -n "Enter Primary key column name: "
-        read pk
-        # Validate that the primary key exists in the columns
-        
-        if [[ -z "$pk" ]]; then
-            echo "Primary key column name cannot be empty. Please enter a valid column name."
-        else if [[ ! " ${col_array[*]} " =~ " $pk " ]]; then
-            echo "Column '$pk' does not exist in the table. Please enter a valid column name."
-        else
-            break
-        fi
-    done
-    
+    #read pk for which col from user
+    echo -n "Enter Primary key column name: "
+    read pk
     #create table
     touch "$table_path"
     #write pk of table
@@ -87,6 +62,7 @@ else
     echo "$data_types" >> "$table_path"
     #write name of columns 
     echo "$columns" >> "$table_path"
+   
    
     echo "the $table_name table is created"
 fi
