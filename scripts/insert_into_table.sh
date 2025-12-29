@@ -8,6 +8,8 @@ echo "----------------------------------"
 echo "-------- INSERT INTO TABLE -------"
 echo "----------------------------------"
 echo ""
+./scripts/list_tables.sh $database_name
+echo ""
 read -p"Enter table name: " table_name
 table_path="$db_path/$database_name/$table_name"
 # Check if table exists

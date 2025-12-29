@@ -15,6 +15,18 @@ mkdir -p "$db_path"
 echo "Enter Database Name: "
 read db_name
 
+# Check for empty database name
+if [[ -z "$db_name" ]]; then
+    echo "Database name cannot be empty!"
+    exit 1
+fi
+
+# Check for invalid characters in database name
+if [[ "$db_name" =~ [/:\"\'\\\?\*\<\>\|] ]]; then
+    echo "Database name contains invalid characters! Please avoid / : \" ' \ ? * < > |"
+    exit 1
+fi  
+
 # Check if the database already exists
 if [[ -d "$db_path/$db_name" ]]; then
     echo "Database already exists!"

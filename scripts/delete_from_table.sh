@@ -9,6 +9,9 @@ echo "-------- DELETE FROM TABLE -------"
 echo "----------------------------------"
 echo ""
 echo "Delete From Table in Database:" $database_name
+echo ""
+./scripts/list_tables.sh $database_name
+echo ""
 read -p "Enter the table name to delete from: " table_name
 table_path="$db_path/$database_name/$table_name"
 if [ ! -f "$table_path" ]; then

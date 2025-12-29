@@ -9,7 +9,9 @@ if [[ -d "$db_path" ]]; then
         echo "No databases found."
     else
         echo "Available Databases:"
+        echo "---------------------"
         ls "$db_path"/
+        echo "---------------------"
     fi
 else
     echo "No databases found."

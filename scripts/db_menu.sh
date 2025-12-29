@@ -5,7 +5,7 @@ while true; do
     clear
     echo "--- DATABASE MANAGEMENT SYSTEM ---"
     echo "----------------------------------"
-    echo "    "$database_name "Database Menu"
+    echo "    '$database_name' Database Menu"
     echo "----------------------------------"
     echo "" 
     # create database menu 
@@ -14,7 +14,7 @@ while true; do
         case $REPLY in 
             1) 
             ./scripts/create_table.sh $database_name 
-            echo "\nPress any key to return to menu..."
+            echo -e "\nPress any key to return to menu..."
             read
             break
             ;;
@@ -23,31 +23,31 @@ while true; do
             ;;
             3) 
             ./scripts/drop_table.sh $database_name
-            echo "\nPress any key to return to menu..."
+            echo -e "\nPress any key to return to menu..."
             read
             break
             ;;
             4) 
             ./scripts/insert_into_table.sh $database_name
-            echo "\nPress any key to return to menu..."
+            echo -e "\nPress any key to return to menu..."
             read
             break
             ;;
             5) 
             ./scripts/select_from_table.sh $database_name
-            echo "\nPress any key to return to menu..."
+            echo -e "\nPress any key to return to menu..."
             read
             break
             ;;
             6) 
             ./scripts/delete_from_table.sh $database_name
-            echo "\nPress any key to return to menu..."
+            echo -e "\nPress any key to return to menu..."
             read
             break
             ;;
             7) 
             ./scripts/update_table.sh $database_name
-            echo "\nPress any key to return to menu..."
+            echo -e "\nPress any key to return to menu..."
             read
             break
             ;;

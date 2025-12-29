@@ -13,7 +13,7 @@ while true; do
         case $REPLY in
             1)
             ./scripts/create_database.sh
-            echo "\nPress any key to return to menu..."
+            echo -e "\nPress any key to return to menu..."
             read
             break
             ;;
@@ -26,7 +26,7 @@ while true; do
             ;;
             4)
             ./scripts/drop_databases.sh
-            echo "\nPress any key to return to menu..."
+            echo -e "\nPress any key to return to menu..."
             read
             break
             ;;
