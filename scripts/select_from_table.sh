@@ -42,22 +42,27 @@ if [ -f "$table_path" ]; then
                 display_indexes="$display_indexes $idx"
             done
     fi
+    #function to print all columns or part of columns
+    print_selected_cols() {
+        awk -F: -v cols="$display_indexes" '
+        {
+            if (cols == "") {
+                print
+            } else {
+                split(cols, a, " ")
+                out=""
+                for (i in a)
+                    out = out $(a[i]) ":"
+                sub(/:$/, "", out)
+                print out
+            }
+        }'
+    }       
  
     case $choice in
         1)
             # Select All
-            if [ "$display_cols" = "*" ]; then
-                awk -F: 'NR>3 { print }' "$table_path"
-            else
-                awk -F: -v cols="$display_indexes" '
-                NR>3 {
-                    split(cols,a, " ")
-                    out=""
-                    for(i in a) out=out $a[i] ":"
-                    sub(/:$/,"",out)
-                    print out
-                }' "$table_path"
-           fi
+            awk -F: 'NR>3 { print }' "$table_path" | print_selected_cols
         ;;
         2)
             # -------- Select With WHERE --------
@@ -151,37 +156,45 @@ if [ -f "$table_path" ]; then
             1)
                 # =
                 awk -F: -v c="$col_num" -v v="$value" \
-                    'NR > 3 && $c == v { print }' "$table_path"
+                'NR > 3 && $c == v { print }' "$table_path" \
+                | print_selected_cols
+
                 ;;
             2)
                  # >
                 awk -F: -v c="$col_num" -v v="$value" \
-                    'NR > 3 && $c > v { print }' "$table_path"
+                'NR > 3 && $c > v { print }' "$table_path" \
+                | print_selected_cols
                 ;;
             3)
                 # <
                 awk -F: -v c="$col_num" -v v="$value" \
-                    'NR > 3 && $c < v { print }' "$table_path"
+                'NR > 3 && $c < v { print }' "$table_path" \
+                | print_selected_cols
                 ;; 
             4)
                  # !=
                 awk -F: -v c="$col_num" -v v="$value" \
-                    'NR > 3 && $c != v { print }' "$table_path"
+                'NR > 3 && $c != v { print }' "$table_path" \
+                | print_selected_cols
                 ;;
             5)
                 # >=
                 awk -F: -v c="$col_num" -v v="$value" \
-                    'NR > 3 && $c >= v { print }' "$table_path"
+                'NR > 3 && $c >= v { print }' "$table_path" \
+                | print_selected_cols
                 ;;
             6)
                 # <=
                 awk -F: -v c="$col_num" -v v="$value" \
-                    'NR > 3 && $c <= v { print }' "$table_path"
+                'NR > 3 && $c <= v { print }' "$table_path" \
+                | print_selected_cols
                 ;;
             7)
                 # between
                 awk -F: -v c="$col_num" -v s="$start" -v e="$end" \
-                    'NR > 3 && $c >= s && $c <= e { print }' "$table_path"
+                'NR > 3 && $c >= s && $c <= e { print }' "$table_path" \
+                | print_selected_cols
                 ;;
             8)
                 # IN
@@ -196,19 +209,22 @@ if [ -f "$table_path" ]; then
                             break
                         }
                     }
-                }' "$table_path"
+                }' "$table_path" \
+                | print_selected_cols
                 ;;
             9)
                 #And
                 awk -F: -v c1="$col_num1" -v v1="$val1" \
                     -v c2="$col_num2" -v v2="$val2" \
-                'NR > 3 && $c1 == v1 && $c2 == v2 { print }' "$table_path"
+                'NR > 3 && $c1 == v1 && $c2 == v2 { print }' "$table_path" \
+                | print_selected_cols
                 ;;
             10) 
                 # OR
                 awk -F: -v c1="$col_num1" -v v1="$val1" \
                     -v c2="$col_num2" -v v2="$val2" \
-                'NR > 3 && ($c1==v1 || $c2==v2) { print }' "$table_path"
+                'NR > 3 && ($c1==v1 || $c2==v2) { print }' "$table_path" \
+                | print_selected_cols
                 ;;
             *)
                 echo "Invalid operator!"
