@@ -19,6 +19,30 @@ if [ -f "$table_path" ]; then
     echo "2) Select With WHERE"
     echo -n "Choose option: "
     read choice
+    columns=$(sed -n '3p' "$table_path")
+    echo "----------------------------"
+    echo "$columns"
+    echo "----------------------------"
+    # Ask user which columns to display
+    echo -n "Enter columns to display separated by colon (e.g. id:name:age) or * for all: "
+    read display_cols
+    if [ "$display_cols" = "*" ]; then
+            display_indexes=""
+    else
+            display_indexes=""
+            IFS=":" read -ra arr <<< "$display_cols"
+            for col in "${arr[@]}"; do
+                idx=$(echo "$columns" | awk -F: -v col="$col" '{
+                    for(i=1;i<=NF;i++) if($i==col){print i; exit}
+                }')
+                if [ -z "$idx" ]; then
+                    echo "Column $col not found!"
+                    exit 1
+                fi
+                display_indexes="$display_indexes $idx"
+            done
+    fi
+ 
     case $choice in
     1)
         #print name of columns

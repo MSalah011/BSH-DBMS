@@ -39,10 +39,21 @@ else
     #read name and datatype of col from user
     for ((i=1; i<=col_num; i++ ))
     do
+        #read name of columns
         echo -n "Enter name of column $i: "
         read col_name
-        echo -n "Enter datatype of $col_name (int|string): "
-        read col_type
+        #read and vaildate data type of columns
+        while true
+        do
+            echo -n "Enter datatype of $col_name (int|string): "
+            read col_type
+
+            if [[ "$col_type" == "int" || "$col_type" == "string" ]]; then
+                break
+            else
+                echo "Invalid datatype. Please enter int or string only."
+            fi
+        done
         #check if column is the frist or not
         if [ $i -eq 1 ]; then
             columns="$col_name"
