@@ -148,9 +148,8 @@ value1:value2:value3
 ---
 
 ## Author
-Mahmoud Salah
-Ahmed Omar
-ITI – Bash Shell Scripting Project
+* Mahmoud Salah
+* Ahmed Omar
 
 ---
 
