@@ -2,6 +2,12 @@
 # This script deletes records from a specified table in a database
 db_path="./Databases"
 database_name="$1"
+clear
+echo "--- DATABASE MANAGEMENT SYSTEM ---"
+echo "----------------------------------"
+echo "-------- DELETE FROM TABLE -------"
+echo "----------------------------------"
+echo ""
 echo "Delete From Table in Database:" $database_name
 read -p "Enter the table name to delete from: " table_name
 table_path="$db_path/$database_name/$table_name"

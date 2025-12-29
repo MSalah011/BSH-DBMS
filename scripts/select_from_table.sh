@@ -1,5 +1,11 @@
 #! /bin/bash
-database_name=$1
+database_name="$1"
+clear
+echo "--- DATABASE MANAGEMENT SYSTEM ---"
+echo "----------------------------------"
+echo "-------- SELECT FROM TABLE -------"
+echo "----------------------------------"
+echo ""
 db_path="./Databases"
 echo -n "Enter table name: "
 read table_name
@@ -11,16 +17,46 @@ if [ -f "$table_path" ]; then
     echo "2) Select With WHERE"
     echo -n "Choose option: "
     read choice
+    columns=$(sed -n '3p' "$table_path")
+    echo "----------------------------"
+    echo "$columns"
+    echo "----------------------------"
+    # Ask user which columns to display
+    echo -n "Enter columns to display separated by colon (e.g. id:name:age) or * for all: "
+    read display_cols
+    if [ "$display_cols" = "*" ]; then
+            display_indexes=""
+    else
+            display_indexes=""
+            IFS=":" read -ra arr <<< "$display_cols"
+            for col in "${arr[@]}"; do
+                idx=$(echo "$columns" | awk -F: -v col="$col" '{
+                    for(i=1;i<=NF;i++) if($i==col){print i; exit}
+                }')
+                if [ -z "$idx" ]; then
+                    echo "Column $col not found!"
+                    exit 1
+                fi
+                display_indexes="$display_indexes $idx"
+            done
+    fi
+ 
     case $choice in
         1)
-             #print name of columns
-            columns=$(sed -n '3p' "$table_path")
-            echo "----------------------------"
-            echo "$columns"
-            echo "----------------------------"
-            # -------- Select All --------
-            awk -F: 'NR > 3 { print }' "$table_path"
-            ;;
+            # Select All
+            if [ "$display_cols" = "*" ]; then
+                awk -F: 'NR>3 { print }' "$table_path"
+            else
+                awk -F: -v cols="$display_indexes" '
+                NR>3 {
+                    split(cols,a, " ")
+                    out=""
+                    for(i in a) out=out $a[i] ":"
+                    sub(/:$/,"",out)
+                    print out
+                }' "$table_path"
+           fi
+        ;;
         2)
             # -------- Select With WHERE --------
            #get operator  
@@ -178,10 +214,10 @@ if [ -f "$table_path" ]; then
             esac
                 ;;
 
-        *)
-            echo "Invalid choice!"
-            ;;
-        esac
+    *)
+        echo "Invalid choice!"
+        ;;
+    esac
 
 else
     echo "Table does not exist!"

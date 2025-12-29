@@ -2,6 +2,15 @@
 # This script updates a database table cell with new data
 db_path="./Databases"
 database_name="$1"
+<<<<<<< HEAD
+=======
+clear
+echo "--- DATABASE MANAGEMENT SYSTEM ---"
+echo "----------------------------------"
+echo "---------- UPDATE TABLE ----------"
+echo "----------------------------------"
+echo ""
+>>>>>>> main
 read -p"Enter table name: " table_name
 table_path="$db_path/$database_name/$table_name"
 # Check if table exists
@@ -23,7 +32,6 @@ if [[ -f "$table_path" ]]; then
     
     col_name=${col_array[$((col_num-1))]}
     read -p"Enter the condition value to identify rows to update (e.g., ID=5): " condition
-
     # Extract condition column and value
     IFS='=' read -r cond_col cond_value <<< "$condition"
 
