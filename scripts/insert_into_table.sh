@@ -57,6 +57,11 @@ if [[ -f "$table_path" ]]; then
                 read -p"Enter value for ${column[$i]}: " value
             done
         fi
+        if [[ "$value" == *:* ]]; then
+            echo "Value cannot contain colon (:). Please enter a valid value."
+            i=$((i-1))
+            continue
+        fi
         if [[ -z "$values" ]]; then
             values="$value"
         else

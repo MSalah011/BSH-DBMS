@@ -4,7 +4,7 @@
 
 This project is a **Database Management System (DBMS)** implemented using **Bash Shell Scripting**. It simulates core DBMS functionalities such as creating databases and tables, inserting, selecting, updating, and deleting records using plain text files as storage.
 
-The project was developed as part of the **ITI Bash Scripting track**, but it goes beyond the basic requirements by supporting advanced SQL-like operations.
+The project was developed for **Bash Scripting Course** as a part of the **ITI Telecom Applications Development Track**, but it goes beyond the basic requirements by supporting advanced SQL-like operations.
 
 ---
 
