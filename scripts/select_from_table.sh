@@ -19,7 +19,7 @@ if [ -f "$table_path" ]; then
     echo "2) Conditional Select"
     echo -n "Choose option: "
     read choice
-    columns=$(sed -n '3p' "$table_path")
+    columns=$(sed -n '3p' "$table_path".metadata)
     echo "----------------------------"
     echo "$columns"
     echo "----------------------------"
@@ -82,13 +82,12 @@ if [ -f "$table_path" ]; then
         '
     }
 
- 
     case $choice in
         1)
             # Select All
             {
-                sed -n '3p' "$table_path"
-                awk -F: 'NR>3 { print }' "$table_path"     
+                echo $columns
+                cat "$table_path"     
             } | print_selected_cols 
             ;;
         2)
@@ -128,34 +127,17 @@ if [ -f "$table_path" ]; then
             # if user choice OR or AND    
             elif [ "$op" -eq 9 ] || [ "$op" -eq 10 ]; then
                 echo "---- First Condition ----"
-                #get name of column1
-                echo -n "Column name: "
-                read col1
-                #get value of col1
-                echo -n "Value: "
-                read val1
+                read -p"Enter the condition value to identify rows to select (WHERE condition) (e.g., ID=5): " condition
+                IFS='=' read -r col1 val1 <<< "$condition"
                 echo "---- Second Condition ----"
-                #get name of col2
-                echo -n "Column name: "
-                read col2
-                #get value of col2
-                echo -n "Value: "
-                read val2    
+                read -p"Enter the condition value to identify rows to select (WHERE condition) (e.g., ID=5): " condition
+                IFS='=' read -r col2 val2 <<< "$condition" 
             else
-                #read name of column
-                echo -n "Enter column name: "
-                read col_name
-                #get value 
-                echo -n "Enter value: "
-                read value
+                read -p"Enter the condition value to identify rows to select (WHERE condition) (e.g., ID=5): " condition
+                IFS='=' read -r col_name value <<< "$condition"
             fi
-            #print name of columns
-            columns=$(sed -n '3p' "$table_path")
-            # echo "----------------------------"
-            # echo "$columns"
-            # echo "----------------------------"
-           # Get column numbers
-           # if choice AND or OR
+
+            # if choice AND or OR
             if [ "$op" -eq 9 ] || [ "$op" -eq 10 ]; then
                 # AND: get numbers for both columns
                 col_num1=$(echo "$columns" | awk -F: -v col="$col1" '{
@@ -183,68 +165,68 @@ if [ -f "$table_path" ]; then
             1)
                 # =
                 {
-                    sed -n '3p' "$table_path"
-                    awk -F: -v c="$col_num" -v v="$value" \
-                    'NR > 3 && $c == v { print }' "$table_path"
+                    echo $columns
+                    awk -F: -v c="$col_num" -v v="$value" '
+                    $c == v { print }' "$table_path"
                 } | print_selected_cols
                 ;;
             2)
                 # >
                 {
-                    sed -n '3p' "$table_path"
+                    echo $columns
                     awk -F: -v c="$col_num" -v v="$value" '
-                    NR > 3 && $c > v { print }' "$table_path" 
+                    $c > v { print }' "$table_path" 
                 } | print_selected_cols
                 ;;
             3)
                 # <
                 {
-                    sed -n '3p' "$table_path"
+                    echo $columns
                     awk -F: -v c="$col_num" -v v="$value" '
-                    NR > 3 && $c < v { print }' "$table_path" 
+                    $c < v { print }' "$table_path" 
                 } | print_selected_cols
                 ;; 
             4)
                 # !=
                 {
-                    sed -n '3p' "$table_path"
+                    echo $columns
                     awk -F: -v c="$col_num" -v v="$value"'
-                    NR > 3 && $c != v { print }' "$table_path"
+                    $c != v { print }' "$table_path"
                 } | print_selected_cols
                 ;;
             5)
                 # >=
                 {
-                    sed -n '3p' "$table_path"
+                    echo $columns
                     awk -F: -v c="$col_num" -v v="$value"'
-                    NR > 3 && $c >= v { print }' "$table_path" 
+                    $c >= v { print }' "$table_path" 
                 } | print_selected_cols
                 ;;
             6)
                 # <=
                 {
-                    sed -n '3p' "$table_path"
+                    echo $columns
                     awk -F: -v c="$col_num" -v v="$value"'
-                    NR > 3 && $c <= v { print }' "$table_path" 
+                    $c <= v { print }' "$table_path" 
                 } | print_selected_cols
                 ;;
             7)
                 # between
                 {
-                    sed -n '3p' "$table_path"
+                    echo $columns
                     awk -F: -v c="$col_num" -v s="$start" -v e="$end" '
-                    NR > 3 && $c >= s && $c <= e { print }' "$table_path" 
+                    $c >= s && $c <= e { print }' "$table_path" 
                 } | print_selected_cols
                 ;;
             8)
                 # IN
                 {
-                    sed -n '3p' "$table_path"
+                    echo $columns
                     awk -F: -v c="$col_num" -v vals="$in_values" '
                     BEGIN {
                         split(vals, arr, ":")
                     }
-                    NR > 3 {
+                    {
                         for (i in arr) {
                             if ($c == arr[i]) {
                                 print
@@ -257,19 +239,17 @@ if [ -f "$table_path" ]; then
             9)
                 #And
                 {
-                    sed -n '3p' "$table_path"
-                    awk -F: -v c1="$col_num1" -v v1="$val1" \
-                    -v c2="$col_num2" -v v2="$val2" '
-                    NR > 3 && $c1 == v1 && $c2 == v2 { print }' "$table_path" 
+                    echo $columns
+                    awk -F: -v c1="$col_num1" -v v1="$val1" -v c2="$col_num2" -v v2="$val2" '
+                    $c1 == v1 && $c2 == v2 { print }' "$table_path" 
                 } | print_selected_cols
                 ;;
             10) 
                 # OR
                 {
-                    sed -n '3p' "$table_path"
-                    awk -F: -v c1="$col_num1" -v v1="$val1" \
-                    -v c2="$col_num2" -v v2="$val2" '
-                    NR > 3 && ($c1==v1 || $c2==v2) { print }' "$table_path" 
+                    echo $columns
+                    awk -F: -v c1="$col_num1" -v v1="$val1" -v c2="$col_num2" -v v2="$val2" '
+                    $c1 == v1 || $c2 == v2 { print }' "$table_path" 
                 } | print_selected_cols
                 ;;
             *)
