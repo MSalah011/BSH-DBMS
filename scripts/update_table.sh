@@ -52,7 +52,20 @@ if [[ -f "$table_path" ]]; then
             read -p"Enter value for ${column[$i]}: " new_value
         done
     fi
-
+    IFS=':' read -r PK PK_col <<< "$(sed -n '1p' "$table_path")"
+    if [[ "$col_name" == "$PK_col" ]]; then
+        if [[ -z "$new_value" ]]; then
+            echo "Primary key value cannot be NULL. Please enter a valid value."
+            exit 1
+        fi
+        # Check for uniqueness of primary key
+        if awk -F: -v c="$col_num" -v val="$new_value" 'NR>3 && $c == val {exit 1}' "$table_path"; then
+            :
+        else
+            echo "Value '$new_value' already exists in column $col_name. Please enter a unique value."
+            exit 1
+        fi
+    fi
     # Update the table
     awk -F: -v OFS=: -v col_idx="$((col_num))" -v cond_idx="$cond_index" -v cond_val="$cond_value" -v new_val="$new_value" '
     NR <= 3 { print; next }
