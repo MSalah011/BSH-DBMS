@@ -35,8 +35,10 @@ if [[ -f "$table_path" ]]; then
                     continue
                 fi
                 # Check for uniqueness of primary key
-                if grep -q "^$pk_value:" "$table_path"; then
-                    echo "Primary key value '$pk_value' already exists. Please enter a unique value."
+                if awk -F: -v c="$((i+1))" -v val="$pk_value" 'NR>3 && $c == val {exit 1}' "$table_path"; then
+                :
+                else
+                    echo "Value '$pk_value' already exists: Primary key should be unique."
                     continue
                 fi
                 break

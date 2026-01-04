@@ -20,12 +20,15 @@ if [[ "$table_name" =~ [/:\"\'\\\?\*\<\>\|] ]]; then
     echo "Table name contains invalid characters! Please avoid / : \" ' \ ? * < > |"
     exit 1
 fi
+
 # save path 
 table_path="$db_path"/"$database_name"/"$table_name"
 
 #check if table exists or not
 if [ -f "$table_path" ];then
     echo "the table already exist"
+    sleep 2
+    exit 1
 else
     #read number of col from user
     echo -n "Enter number of columns: "
@@ -58,11 +61,12 @@ else
     IFS=':' read -ra col_array <<< "$columns"
     while true; do
         #read pk for which col from user
-        echo -n "Enter Primary key column name: "
+        echo -n "Enter Primary key column name(Leave blank if no primary key is needed): "
         read pk
         # Validate that the primary key exists in the columns
         if [[ -z "$pk" ]]; then
-            echo "Primary key column name cannot be empty. Please enter a valid column name."
+            echo "No primary key set for the table."
+            break
         elif [[ ! " ${col_array[*]} " =~ " $pk " ]]; then
             echo "Column '$pk' does not exist in the table. Please enter a valid column name."
         else
@@ -78,6 +82,7 @@ else
     #write name of columns 
     echo "$columns" >> "$table_path"
    
-   
-    echo "the $table_name table is created"
+    echo "the $table_name table is created successfully."
+    sleep 2
+    exit 0
 fi
