@@ -8,6 +8,6 @@ if [ -z "$(ls -A "$db_path/$database_name")" ]; then
 else
     echo "Tables in database '$database_name':"
     echo "-------------------------------"
-    ls "$db_path/$database_name"
+    ls "$db_path/$database_name" | grep -v "\.metadata$"
     echo "-------------------------------"
 fi

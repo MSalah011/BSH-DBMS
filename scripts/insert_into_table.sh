@@ -15,11 +15,11 @@ table_path="$db_path/$database_name/$table_name"
 # Check if table exists
 if [[ -f "$table_path" ]]; then
     # Read the first line to get primary key column
-    IFS=':' read -r PK primary_key <<< $(sed -n '1p' "$table_path")
+    IFS=':' read -r PK primary_key <<< $(sed -n '1p' "$table_path".metadata)
     # Read the second line to get column data types
-    IFS=':' read -r -a data_type <<< $(sed -n '2p' "$table_path")
+    IFS=':' read -r -a data_type <<< $(sed -n '2p' "$table_path".metadata)
     # Read the third line to get column names
-    IFS=':' read -r -a column <<< $(sed -n '3p' "$table_path")
+    IFS=':' read -r -a column <<< $(sed -n '3p' "$table_path".metadata)
     for (( i=0; i<${#column[@]}; i++ )); do
         if [[ "${column[$i]}" == "$primary_key" ]]; then
             while true; do
@@ -35,7 +35,7 @@ if [[ -f "$table_path" ]]; then
                     continue
                 fi
                 # Check for uniqueness of primary key
-                if awk -F: -v c="$((i+1))" -v val="$pk_value" 'NR>3 && $c == val {exit 1}' "$table_path"; then
+                if awk -F: -v c="$((i+1))" -v val="$pk_value" '$c == val {exit 1}' "$table_path"; then
                 :
                 else
                     echo "Value '$pk_value' already exists: Primary key should be unique."

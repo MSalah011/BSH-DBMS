@@ -25,13 +25,13 @@ if [ -z "$condition_column" ] || [ -z "$condition_value" ]; then
     exit 1
 fi
 # Get the index of the condition column
-col_index=$(awk -F':' -v col="$condition_column" 'NR==3 { for(i=1; i<=NF; i++) { if($i == col) { print i; exit } } }' "$table_path")
+col_index=$(awk -F':' -v col="$condition_column" 'NR==3 { for(i=1; i<=NF; i++) { if($i == col) { print i; exit } } }' "$table_path".metadata)
 if [ -z "$col_index" ]; then
     echo "Column $condition_column not found"
     exit 1
 fi
 # Find the line number of the record to delete
-line_num=$(awk -F':' -v col="$col_index" -v val="$condition_value" 'NR>3 && $col==val  { print NR }' "$table_path")
+line_num=$(awk -F':' -v col="$col_index" -v val="$condition_value" '$col==val  { print NR }' "$table_path")
 
 if [ -z "$line_num" ]; then
     echo "No record found matching condition $condition."

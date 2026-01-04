@@ -10,6 +10,7 @@ if [[ -f "$db_path/$database_name/$table_name" ]]; then
     # check confirm
     if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
         rm "$db_path/$database_name/$table_name"
+        rm "$db_path/$database_name/$table_name".metadata
         echo "Table '$table_name' deleted successfully from database '$database_name'."
     else
         echo "Drop cancelled."

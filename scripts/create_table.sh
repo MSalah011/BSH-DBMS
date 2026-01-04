@@ -75,12 +75,13 @@ else
     done
     #create table
     touch "$table_path"
+    touch "$table_path".metadata
     #write pk of table
-    echo "PK:$pk" >> "$table_path"
+    echo "PK:$pk" >> "$table_path".metadata
     #write datatype of columns  
-    echo "$data_types" >> "$table_path"
+    echo "$data_types" >> "$table_path".metadata
     #write name of columns 
-    echo "$columns" >> "$table_path"
+    echo "$columns" >> "$table_path".metadata
    
     echo "the $table_name table is created successfully."
     sleep 2
