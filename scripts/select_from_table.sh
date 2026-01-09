@@ -24,13 +24,14 @@ if [ -f "$table_path" ]; then
     echo "$columns"
     echo "----------------------------"
     # Ask user which columns to display
-    echo -n "Enter columns to display separated by colon (e.g. id:name:age) or * for all: "
+    echo -n "Enter columns to display separated by colon (e.g. id, name, age) or * for all: "
     read display_cols
+    display_cols=$(echo $display_cols | tr -d ' ')
     if [ "$display_cols" = "*" ]; then
             display_indexes=""
     else
             display_indexes=""
-            IFS=":" read -ra arr <<< "$display_cols"
+            IFS="," read -ra arr <<< "$display_cols"
             for col in "${arr[@]}"; do
                 idx=$(echo "$columns" | awk -F: -v col="$col" '{
                     for(i=1;i<=NF;i++) if($i==col){print i; exit}
@@ -105,7 +106,6 @@ if [ -f "$table_path" ]; then
             echo "10) OR"
             echo -n "Choose operator:"
             read op
-            # read value(s)
             #if user choice between
             if [ "$op" -eq 7 ]; then
                 #read name of column
@@ -122,8 +122,9 @@ if [ -f "$table_path" ]; then
                 echo -n "Enter column name: "
                 read col_name
                 #get values
-                echo -n "Enter values separated by colon (e.g. 10:20:30): "
+                echo -n "Enter values separated by colon (e.g. 10, 20, 30): "
                 read in_values
+                in_values=$(echo $in_values | tr -d ' ')
             # if user choice OR or AND    
             elif [ "$op" -eq 9 ] || [ "$op" -eq 10 ]; then
                 echo "---- First Condition ----"
@@ -133,8 +134,10 @@ if [ -f "$table_path" ]; then
                 read -p"Enter the condition value to identify rows to select (WHERE condition) (e.g., ID=5): " condition
                 IFS='=' read -r col2 val2 <<< "$condition" 
             else
-                read -p"Enter the condition value to identify rows to select (WHERE condition) (e.g., ID=5): " condition
-                IFS='=' read -r col_name value <<< "$condition"
+                echo -n "Enter column name: "
+                read col_name
+                echo -n "Enter value: "
+                read value
             fi
 
             # if choice AND or OR
@@ -162,7 +165,8 @@ if [ -f "$table_path" ]; then
             fi
             # select rows
             case $op in
-            1)
+            
+            1) 
                 # =
                 {
                     echo $columns
@@ -178,7 +182,7 @@ if [ -f "$table_path" ]; then
                     $c > v { print }' "$table_path" 
                 } | print_selected_cols
                 ;;
-            3)
+            3) 
                 # <
                 {
                     echo $columns
@@ -186,7 +190,7 @@ if [ -f "$table_path" ]; then
                     $c < v { print }' "$table_path" 
                 } | print_selected_cols
                 ;; 
-            4)
+            4) 
                 # !=
                 {
                     echo $columns
@@ -194,7 +198,7 @@ if [ -f "$table_path" ]; then
                     $c != v { print }' "$table_path"
                 } | print_selected_cols
                 ;;
-            5)
+            5) 
                 # >=
                 {
                     echo $columns
@@ -202,7 +206,7 @@ if [ -f "$table_path" ]; then
                     $c >= v { print }' "$table_path" 
                 } | print_selected_cols
                 ;;
-            6)
+            6) 
                 # <=
                 {
                     echo $columns
@@ -224,7 +228,7 @@ if [ -f "$table_path" ]; then
                     echo $columns
                     awk -F: -v c="$col_num" -v vals="$in_values" '
                     BEGIN {
-                        split(vals, arr, ":")
+                        split(vals, arr, ",")
                     }
                     {
                         for (i in arr) {
@@ -255,9 +259,9 @@ if [ -f "$table_path" ]; then
             *)
                 echo "Invalid operator!"
                 ;;
+            
             esac
                 ;;
-
     *)
         echo "Invalid choice!"
         ;;
