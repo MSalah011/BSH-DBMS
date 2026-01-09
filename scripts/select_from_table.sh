@@ -17,7 +17,7 @@ if [ -f "$table_path" ]; then
     # select all from table
     echo "1) Select without condition"
     echo "2) Conditional Select"
-    echo -n "Choose option: "
+    echo -n "Choose option: "   
     read choice
     columns=$(sed -n '3p' "$table_path".metadata)
     echo "----------------------------"
@@ -26,7 +26,7 @@ if [ -f "$table_path" ]; then
     # Ask user which columns to display
     echo -n "Enter columns to display separated by colon (e.g. id, name, age) or * for all: "
     read display_cols
-    display_cols=$(echo $display_cols | tr -d ' ')
+    display_cols=$(echo "$display_cols" | tr -d ' ')
     if [ "$display_cols" = "*" ]; then
             display_indexes=""
     else
